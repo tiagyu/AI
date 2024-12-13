@@ -2,3 +2,4 @@
 from random import *
 
 print(random())
+#radom 정렬
