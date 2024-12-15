@@ -4,3 +4,4 @@ from random import *
 print(random())
 #radom 정렬
 print()
+# 파이썬 기본 공부 필수
