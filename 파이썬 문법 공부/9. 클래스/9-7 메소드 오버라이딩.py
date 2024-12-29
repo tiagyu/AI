@@ -40,3 +40,5 @@ class FlyableAttackUnit(AttackUnit, Flyable):
 # 발키리 : 공중 공격 유닛, 한번에 14발 미사일 발사
 valkyrie = FlyableAttackUnit('발키리',200,6,5)
 valkyrie.fly(valkyrie.name, '3시')
+
+# 메소드 오버라이딩
