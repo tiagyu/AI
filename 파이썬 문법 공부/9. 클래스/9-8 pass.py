@@ -1,14 +1,19 @@
 # pass
 # 일반 유닛
 class Unit:
-    def __init__(self, name, hp):
+    def __init__(self, name, hp, speed):
         self.name = name
         self.hp = hp
+        self.speed = speed
+        
+    def move(self, location):
+        print('[지상 유닛 이동]')
+        print(f'{self.name} : {location} 방향으로 이동합니다. [속도 {self.speed}]')
 
 # 공격 유닛
 class AttackUnit(Unit):
-    def __init__(self, name, hp, damage):
-        Unit.__init__(self, name, hp) # Unit class를 상속 받음
+    def __init__(self, name, hp, speed, damage):
+        Unit.__init__(self, name,hp, speed) # Unit class를 상속 받음
         self.damage = damage
         
     def attack(self, location):
@@ -34,6 +39,26 @@ class Flyable:
 # 공중 공격 유닛 클래스
 class FlyableAttackUnit(AttackUnit, Flyable):
     def __init__(self, name, hp, damage, flying_speed):
-        AttackUnit.__init__(self, name, hp, damage)
+        AttackUnit.__init__(self, name, hp, 0,damage) # 지상 speed는 0
         Flyable.__init__(self, flying_speed)
         
+    def move(self, location)   :
+        print('[공중 유닛 이동]')
+        self.fly(self.name, location)
+
+# 건물
+class BuildingUnit(Unit):
+    def __init__(self, name, hp, location):
+        pass
+    
+# 서플라이 디폿 : 건물, 1개 건물 = 8 유닛 생성
+supply_depot = BuildingUnit('서플라이 디폿', 500, '7시')
+
+def game_start():
+    print('[알림] 새로운 게임을 시작합니다')
+    
+def game_over():
+    pass
+
+game_start()
+game_over()
