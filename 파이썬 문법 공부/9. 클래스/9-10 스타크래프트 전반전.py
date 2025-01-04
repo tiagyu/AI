@@ -6,3 +6,5 @@ class Unit:
         self.name = name
         self.hp = hp
         self.speed = speed
+
+# 오늘은 여기까지
