@@ -1,4 +1,6 @@
 # 스타크래프트
+from random import *
+
 # 일반 유닛
 class Unit:
     def __init__(self, name, hp, speed):
@@ -85,7 +87,7 @@ class FlyableAttackUnit(AttackUnit, Flyable):
 # 레이스
 class Wraith(FlyableAttackUnit):
     def __init__(self):
-        FlyableAttackUnit.__init__('레이스', 80, 20, 5)
+        FlyableAttackUnit.__init__(self, '레이스', 80, 20, 5)
         self.clocked = False # 클로킹 모드 (해제 상태)
     
     def clocking(self):
@@ -95,3 +97,62 @@ class Wraith(FlyableAttackUnit):
         else: # 클로킹 모드 해제 -> 모드 설정
             print(f'{self.name} : 클로킹 모드 설정합니다')
             self.clocked = True
+            
+def starcraft():
+    print('스타크래프트를 시작합니다')
+    
+def starcraft_over():
+    print('스타크래프가 종료되었습니다')
+    print('플레이어가 gg를 치고 나갔습니다')
+    
+# 실제 게임 진행
+starcraft()
+
+# 마린 3개 생성
+m1 = Marine()
+m2 = Marine()
+m3 = Marine()
+
+# 탱크 2개 생성
+t1 = Tank()
+t2 = Tank()
+
+# 레이스 1기 생성
+w1 = Wraith()
+
+# 유닛 일괄 관리 (생성된 모든 유닛 append)
+attack_units_list = []
+attack_units_list.append(m1)
+attack_units_list.append(m2)
+attack_units_list.append(m3)
+attack_units_list.append(t1)
+attack_units_list.append(t2)
+attack_units_list.append(w1)
+
+# 전군 이동
+for unit in attack_units_list:
+    unit.move('1시')
+    
+# 탱크 시즈모드 개발
+Tank.seize_developed = True
+print('[알림] 탱크 시즈 모드 개발이 완료되었습니다')
+
+# 공격 모드 준비 (마린 : 스팀팩, 탱크 : 시즈모드, 레이스 : 클로킹)
+for unit in attack_units_list:
+    if isinstance(unit, Marine):
+        unit.stimpack()
+    elif isinstance(unit, Tank):
+        unit.set_seize_mode()
+    elif isinstance(unit, Wraith):
+        unit.clocking()
+        
+# 전군 공격
+for unit in attack_units_list:
+    unit.attack('1시')
+    
+# 전국 피해
+for unit in attack_units_list:
+    unit.damaged(randint(5, 21)) # 공격을 랜덤으로 받음 (5~20)
+    
+# 게임 종료
+starcraft_over()
