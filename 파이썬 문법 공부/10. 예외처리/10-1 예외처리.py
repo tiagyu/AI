@@ -15,7 +15,7 @@ try:
     box = []
     box.append(input('첫 번째 음료수'))
     box.append(input('두 번째 음료수'))
-    # box.append(box[0]+box[1])
+    # box.append(box[0]+box[1])1
     print(f'음료수 종료는 {box[0]}, {box[1]}이 있고 둘을 섞으면 {box[2]}')
 except Exception as err:
     print(err)
