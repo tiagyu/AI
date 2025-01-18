@@ -14,5 +14,5 @@ byme.sign()
 
 """
 
-import byme
-byme.sign()
+import hello
+hello.sign()
