@@ -12,5 +12,4 @@ def coupon(price):
     
 # 군인 할인 가격
 def soldier(price):
-    print(f'5명 팝콘의 가격은 {int((price * 5) * 0.4)}원 입니다')
-
+    print(f'5명 팝콘의 가격은 {int((price * 5) * 0.5)}원 입니다')
