@@ -8,7 +8,7 @@ int main(void)
     printf("%d\n",age); 여러 줄 주석 처리리
     */
 
-    // 실수형 변수에 대한 예제
+    // 실수형 변수에 대한 예제 1
     float f = 46.5f;
     printf("%.2f\n",f);
     double d = 4.428;
