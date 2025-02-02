@@ -12,8 +12,14 @@ int main(void)
     /* float f = 46.5f;
     printf("%.2f\n",f);
     double d = 4.428;
-    printf("%.2lf\n", d); */
-    int YEAR = 2000;
-    printf("태어난 년도 : %d\n", YEAR);
+    printf("%.2lf\n", d); 
+    const int YEAR = 2000; //const로 변수가 아닌 상수로 표시, 상수의 개념
+    printf("태어난 년도 : %d\n", YEAR); */
+
+    //printf
+    int add = 3 + 7; //10
+    //printf(" 3 + 7 = %d\n", add);
+    printf(" %d + %d = %d\n", 3, 7, 3+7);
+
     return 0;
 }
