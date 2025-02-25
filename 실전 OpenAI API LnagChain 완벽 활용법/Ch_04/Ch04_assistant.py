@@ -15,6 +15,11 @@ import base64
 import numpy as np
 from dotenv import load_dotenv
 
+# OPENAI API 키 저장하기
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
+
 #### 기능 구현 함수 ####
 # 음성을 텍스트로 변환하는 STT(Speech-To-Text) API
 def STT(audio, client):
@@ -61,7 +66,7 @@ def TTS(response, client):
     # 저장한 음성 파일을 자동 재생
     with open(file_name, "rb") as f:
         data = f.read()
-        b64 = base64.b64decode(data).decode()
+        b64 = base64.b64decode(data).decode("utf-8")
 
         # 스트림릿에서 음성 자동 재생
         md = f"""
@@ -89,7 +94,8 @@ def main():
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=api_key)
-
+    
+    
     # 화면 상단에 표시될 프로그램의 이름
     st.set_page_config(
         page_title="음성 비서 프로그램",
@@ -109,6 +115,9 @@ def main():
     # 기능 구현 공간
     col1, col2 = st.columns(2)
 
+    # 음성 입력 확인용 플래그
+    flag_start = False
+
     # 왼쪽 공간 작성
     with col1:
         # 제목
@@ -116,46 +125,48 @@ def main():
         # st.image("ai.png", width=200)
         # 구분선
         st.markdown('---')
-
-        # 음성 입력 확인용 플래그
-        flag_start = False
-
-        # 음성 녹음 아이콘 추가
-        duration = 5
-        fs = 44100
         
-        audio = sd.rec(int(duration * fs), samplerate=fs, channels=2)
-        sd.wait()
-        if len(audio) > 0 and not np.array_equal(
-            audio,
-            st.session_state["check_audio"]
-        ):
-            # 음성 재생
-            # 녹음된 NumPy 배열을 WAV 파일로 저장
-            file_name = "input.wav"
-            sf.write(file_name, audio, fs)
+        # 녹음 시작 버튼 추가
+        record_button = st.button("녹음 시작")  
+
+        if record_button:
+            #st.wirte("녹음 중 5초 동안 말하세요")
+            # 음성 녹음 아이콘 추가
+            duration = 5
+            fs = 44100
             
-            with open(file_name, "rb") as f:
-                audio_byte = f.read()
-            
-            st.audio(audio_byte, format="audio/wav")
-            
-            # 음원 파일에서 텍스트를 추출
-            question = STT(audio, client)
-            
-            # GPT 모델에 넣을 프롬프트를 위해 질문을 저장. 이때 기존 내용을 누적
-            st.session_state['messages'] = st.session_state['messages'] + [{"role" : "user", "content" : question}]
-            
-            # audio 버퍼 확인을 위해 현 시점의 오디오 정보를 저장
-            st.session_state["check_audio"] = audio
-            flag_start = True
+            audio = sd.rec(int(duration * fs), samplerate=fs, channels=2)
+            sd.wait()
+            if len(audio) > 0 and not np.array_equal(
+                audio,
+                st.session_state["check_audio"]
+            ):
+                # 음성 재생
+                # 녹음된 NumPy 배열을 WAV 파일로 저장
+                file_name = "input.wav"
+                sf.write(file_name, audio, fs)
+                
+                with open(file_name, "rb") as f:
+                    audio_byte = f.read()
+                
+                st.audio(audio_byte, format="audio/wav")
+                
+                # 음원 파일에서 텍스트를 추출
+                question = STT(audio, client)
+                
+                # GPT 모델에 넣을 프롬프트를 위해 질문을 저장. 이때 기존 내용을 누적
+                st.session_state['messages'] = st.session_state['messages'] + [{"role" : "user", "content" : question}]
+                
+                # audio 버퍼 확인을 위해 현 시점의 오디오 정보를 저장
+                st.session_state["check_audio"] = audio
+                flag_start = True
             
     with col2:
         st.subheader("대화기록 = ")
         if flag_start:
             
             # ChatGPT에게 답변 얻기
-            response = ask_gpt(st.session_state['"messages'], client)
+            response = ask_gpt(st.session_state['messages'], client)
             
             # GPT 모델에 넣을 프롬프트를 위해 답변 내용을 저장
             st.session_state["messages"] = st.session_state['messages'] + [{"role" : "assistant", "content" : response}]
