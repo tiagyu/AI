@@ -29,14 +29,47 @@ type_emoji_dict = {
     "페어리": "🧚"
 }
 
-pokemon = {
-    "name" : "누오",
-    "types" : ["물", "땅"],
-    "image_url" : "https://i.namu.wiki/i/yPyz2HN3jTaxRxAm3gWtpbB3QybvKCUgdUTrz5K3ZEdrYEjsDzYmLe6J7R1eJ9E2GtBWy6MpLiRTpCrzSNq25wmUfuZXTsI8DPonh6gKagnewNTf9qGOjG0LcC1mzV-RuMfefT-DWjxfyEvk3PVfzg.webp"
-}
+pokemons = [
+    {
+        "name": "피카츄",
+        "types": ["전기"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/pikachu.webp"
+    },
+    {
+        "name": "누오",
+        "types": ["물", "땅"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/nuo.webp",
+    },
+    {
+        "name": "갸라도스",
+        "types": ["물", "비행"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/garados.webp",
+    },
+    {
+        "name": "개굴닌자",
+        "types": ["물", "악"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/frogninja.webp"
+    },
+    {
+        "name": "루카리오",
+        "types": ["격투", "강철"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/lukario.webp"
+    },
+    {
+        "name": "에이스번",
+        "types": ["불꽃"],
+        "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/acebun.webp"
+    },
+]
 
-
-with st.expander(label=pokemon["name"], expanded=True):
-    st.image(pokemon["image_url"])
-    emoji_types = [f"{type_emoji_dict[x]} {x}" for x in pokemon["types"]]
-    st.subheader(" / ".join(emoji_types))
+for i in range(0,len(pokemons),3):
+    row_pokemons = pokemons[i:i+3]
+    cols = st.columns(3)
+    for j in range(len(row_pokemons)):
+        with cols[j]:
+            pokemon = row_pokemons[j]
+            with st.expander(label=f"**{i+j+1}. {pokemon['name']}**", expanded=True):
+                st.image(pokemon["image_url"])
+                emoji_types = [f"{type_emoji_dict[x]} {x}" for x in pokemon["types"]]
+                st.subheader(" / ".join(emoji_types))
+    
