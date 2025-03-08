@@ -1,5 +1,6 @@
 import streamlit as st
 
+print("page reloaded")
 st.set_page_config(
     page_title="포켓몬 도감",
     page_icon="./images/monsterball.png"
@@ -120,4 +121,10 @@ for i in range(0,len(st.session_state.pokemons),3):
                 st.image(pokemon["image_url"])
                 emoji_types = [f"{type_emoji_dict[x]} {x}" for x in pokemon["types"]]
                 st.subheader(" / ".join(emoji_types))
-    
+                delete_button = st.button(label="삭제", 
+                                          key=i+j,
+                                          use_container_width=True)
+                if delete_button:
+                    print("delte button clicked!")
+                    del st.session_state.pokemons[i+j]
+                    st.rerun()
