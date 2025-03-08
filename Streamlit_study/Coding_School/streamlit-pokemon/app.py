@@ -29,7 +29,7 @@ type_emoji_dict = {
     "페어리": "🧚"
 }
 
-pokemons = [
+initial_pokemons = [
     {
         "name": "피카츄",
         "types": ["전기"],
@@ -62,6 +62,11 @@ pokemons = [
     },
 ]
 
+if "pokemons" not in st.session_state:
+    st.session_state.pokemons = initial_pokemons
+
+
+
 with st.form(key="form"):
     col1, col2 = st.columns(2)
     with col1:
@@ -81,7 +86,7 @@ with st.form(key="form"):
             st.error("포켓몬의 속성을 적어도 한개 선택해주세요")
         else:
             st.success("포켓몬을 추가할 수 있습니다")
-            pokemons.append({
+            st.session_state.pokemons.append({
                 "name": name,
                 "types": types,
                 "image_url": image_url if image_url else "./images/default.png"
@@ -91,8 +96,8 @@ with st.form(key="form"):
         print("image url", image_url)
         
 
-for i in range(0,len(pokemons),3):
-    row_pokemons = pokemons[i:i+3]
+for i in range(0,len(st.session_state.pokemons),3):
+    row_pokemons = st.session_state.pokemons[i:i+3]
     cols = st.columns(3)
     for j in range(len(row_pokemons)):
         with cols[j]:
