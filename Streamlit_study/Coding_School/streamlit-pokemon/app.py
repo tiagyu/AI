@@ -62,22 +62,36 @@ initial_pokemons = [
     },
 ]
 
+example_pokemon = {
+    "name": "알로라 디그다",
+    "types": ["땅", "강철"],
+    "image_url": "https://storage.googleapis.com/firstpenguine-coding-school/pokemons/alora_digda.webp"
+}
+
+# session_state는 새로고침하거나 페이지를 다시 닫으면 사라짐
 if "pokemons" not in st.session_state:
     st.session_state.pokemons = initial_pokemons
 
-
-
+auto_complete = st.toggle("예시 데이터로 채우기")
+print("page reload, auto_complete", auto_complete)
 with st.form(key="form"):
     col1, col2 = st.columns(2)
     with col1:
-        name = st.text_input(label="포켓몬 이름")
+        name = st.text_input(
+            label="포켓몬 이름",
+            value=example_pokemon["name"] if auto_complete else ""
+        )
     with col2:
         types = st.multiselect(
             label="포켓몬 속성", 
             options=list(type_emoji_dict.keys()),
-            max_selections=2
+            max_selections=2,
+            default=example_pokemon["types"] if auto_complete else []
         )
-    image_url = st.text_input(label="포켓몬 이미지 url")
+    image_url = st.text_input(
+        label="포켓몬 이미지 url",
+        value=example_pokemon["image_url"] if auto_complete else ""
+    )
     submit = st.form_submit_button(label="Submit")
     if submit:
         if not name:
