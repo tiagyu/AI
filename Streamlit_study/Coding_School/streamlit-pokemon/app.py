@@ -6,6 +6,22 @@ st.set_page_config(
     page_icon="./images/monsterball.png"
 )
 
+st.markdown("""
+<style>
+img {
+    max-height: 300px;
+}
+.streamlit-expanderContent div {
+    display: flex;
+    justify-content: center;
+    font-size:20px;
+}
+[data-testid = "stExpanderToggleIcon"] {
+    visibility: hidden;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("streamlit 포켓몬 도감")
 st.markdown("**포켓몬**을 하나씩 추가해서 도감을 채워보세요")
 
