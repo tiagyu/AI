@@ -1,4 +1,31 @@
 import streamlit as st
+from openai import OpenAI
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
+
+def request_chat_completion(prompt, 
+                            system_role = "당신은 유용한 도우미입니다.", 
+                            model = "gpt-3.5-turbo",
+                            stream = False):
+    messages = [
+        {"role" : "system", "content" : system_role},
+        {"role" : "user", "content" : prompt}
+    ]
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        stream=stream
+    )
+    return response
+    
 
 st.set_page_config(
     page_title = "chatGPT API 서비스 개발",
@@ -14,6 +41,20 @@ example = {
     "product_desc" : "집에서도 카페 맛이나는 커피믹스",
     "keywords" : ["브라질", "향기", "공유"]
 }
+
+prompt_template = """
+제품 혹은 브랜드를 SNS에 광고하기 위한 문구 {num}개 생성해주세요.
+자극적이고 창의적으로 작성해주세요.
+명사 위주로 간결하게 작성해주세요.
+반드시 {max_length} 단어 이내로 작성해주세요.
+키워드가 주어질 경우, 반드시 키워드 중 하나를 포함해야 합니다.
+이모지를 적절하게 사용해주세요.
+---
+제품명 : {product_name}
+제품설명 : {product_desc}
+키워드 : {keywords}
+
+""".strip()
 
 with st.form("form"):
     col1, col2, col3 = st.columns(3)
@@ -74,5 +115,22 @@ if submit:
     elif not product_desc:
         st.error("제품설명을 추가해주세요")
     else:
-        print("click_submit")
+        keywords = [keyword_1, keyword_2, keyword_3]
+        keywords = [x for x in keywords if x]
+        prompt = prompt_template.format(
+            product_name=product_name,
+            product_desc=product_desc,
+            max_length=max_length,
+            num=num,
+            keywords = keywords
+        )
+        system_role="당신은 전문 카피라이터입니다"
+        with st.spinner("마켓팅 문구를 생성 중입니다!"):
+            response = request_chat_completion(
+                prompt = prompt,
+                system_role=system_role,
+                stream=False
+            )
+        generated_text = response.choices[0].message.content
+        st.text(generated_text)
         st.success("마케팅 문구를 생성할 수 있습니다!")
