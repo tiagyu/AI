@@ -3,30 +3,8 @@ from openai import OpenAI
 import openai
 import os
 from dotenv import load_dotenv
-
-load_dotenv()
-
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
-
-def request_chat_completion(prompt, 
-                            system_role = "당신은 유용한 도우미입니다.", 
-                            model = "gpt-3.5-turbo",
-                            stream = False):
-    messages = [
-        {"role" : "system", "content" : system_role},
-        {"role" : "user", "content" : prompt}
-    ]
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        stream=stream
-    )
-    return response
+from common import request_chat_completion, stream_response
     
-
 st.set_page_config(
     page_title = "chatGPT API 서비스 개발",
     page_icon = "https://static.vecteezy.com/system/resources/thumbnails/021/059/827/small_2x/chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpg"
@@ -129,8 +107,9 @@ if submit:
             response = request_chat_completion(
                 prompt = prompt,
                 system_role=system_role,
-                stream=False
+                stream=True
             )
-        generated_text = response.choices[0].message.content
-        st.text(generated_text)
-        st.success("마케팅 문구를 생성할 수 있습니다!")
+        stream_response(response)
+        # stream이 True인 경우
+        # generated_text = response.choices[0].message.content
+        # st.text(generated_text)
