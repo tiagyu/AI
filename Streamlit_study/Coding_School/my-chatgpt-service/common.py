@@ -37,3 +37,12 @@ def stream_response(response):
             # print(delta.content, end="", flush=True)
     placeholder.markdown(message)
     return message
+
+def stream_response_console(response):
+    message = ""
+    for chunk in response:
+        delta = chunk.choices[0].delta
+        if delta and delta.content:
+            message += delta.content
+            print(delta.content, end="")
+    return message
