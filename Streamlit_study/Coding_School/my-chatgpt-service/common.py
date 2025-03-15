@@ -3,6 +3,8 @@ from openai import OpenAI
 import openai
 import os
 from dotenv import load_dotenv
+import requests
+from bs4 import BeautifulSoup
 
 load_dotenv()
 
@@ -46,3 +48,9 @@ def stream_response_console(response):
             message += delta.content
             print(delta.content, end="")
     return message
+
+def crawl_naver_entertainment(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "lxml")
+    article = soup.find("div", class_= "newsct_article _article_body").text.strip()
+    return article
