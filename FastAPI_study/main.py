@@ -1,13 +1,16 @@
 from fastapi import FastAPI
-from typing import Union
 from pydantic import BaseModel
+from controller import items, users
 
 app = FastAPI()
+
+app.include_router(items.router)
+app.include_router(users.router)
 
 @app.get("/")
 def read_root():
     return {"HELLO" : "WORLD"}
 
-@app.get("/item/{item_id}")
-def read_item(item_id : int, q : Union[str, None] = None):
-    return {"item_id" : item_id, "q" : q}
+@app.get("/routes")
+def get_routes():
+    return [{"path": route.path, "name": route.name} for route in app.routes]
