@@ -9,8 +9,4 @@ app.include_router(users.router)
 
 @app.get("/")
 def read_root():
-    return {"HELLO" : "WORLD"}
-
-@app.get("/routes")
-def get_routes():
-    return [{"path": route.path, "name": route.name} for route in app.routes]
+    return {"HELLO" : "My name is Roh"}
